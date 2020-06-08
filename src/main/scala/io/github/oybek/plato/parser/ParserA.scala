@@ -10,7 +10,7 @@ import org.jsoup.nodes.{Document, Element}
 import scala.collection.JavaConverters._
 import scala.concurrent.duration._
 
-object Parser001 extends Parser {
+object ParserA extends Parser {
   def parse(doc: Document): List[(String, List[Arrival])] = {
     val time = doc.select("div.header").asScala.toString()
     val hhmm = "[0-9]?[0-9]:[0-9][0-9]".r.findAllIn(time).toList.headOption.map(_.split(":"))
