@@ -7,26 +7,39 @@ import io.github.oybek.plato.model.TransportT.{Bus, Tram, Troll}
 import io.github.oybek.plato.model.{Arrival, TransportT}
 import org.jsoup.nodes.{Document, Element}
 
-import scala.collection.JavaConverters._
+import scala.jdk.CollectionConverters._
 import scala.concurrent.duration._
 
 object ParserA extends Parser {
   def parse(doc: Document): List[(String, List[Arrival])] = {
     val time = doc.select("div.header").asScala.toString()
-    val hhmm = "[0-9]?[0-9]:[0-9][0-9]".r.findAllIn(time).toList.headOption.map(_.split(":"))
+    val hhmm = "[0-9]?[0-9]:[0-9][0-9]".r
+      .findAllIn(time)
+      .toList
+      .headOption
+      .map(_.split(":"))
     hhmm match {
       case Some(arr) if (arr.length == 2) =>
         val btime = LocalTime.of(arr(0).toInt, arr(1).toInt)
-        doc.select("div.eight.wide.column").iterator().asScala.toList.filter(
-          _.select("a.ui.labeled.small.icon.button").iterator().asScala.toList.nonEmpty
-        ).flatMap(
-          parseBlock(btime, _)
-        )
+        doc
+          .select("div.eight.wide.column")
+          .iterator()
+          .asScala
+          .toList
+          .filter(
+            _.select("a.ui.labeled.small.icon.button")
+              .iterator()
+              .asScala
+              .toList
+              .nonEmpty
+          )
+          .flatMap(parseBlock(btime, _))
       case _ => List()
     }
   }
 
-  def parseBlock(curTime: LocalTime, element: Element): Option[(String, List[Arrival])] =
+  def parseBlock(curTime: LocalTime,
+                 element: Element): Option[(String, List[Arrival])] =
     for {
       dir <- Option(element.select("h3").first()).map(_.ownText())
       arrivals <- Option(element.select("tbody").first())

@@ -5,12 +5,13 @@ import java.time.LocalTime
 import io.github.oybek.plato.model.Arrival
 import io.github.oybek.plato.model.TransportT.{Bus, Tram, Troll}
 import org.jsoup.Jsoup
-import org.scalatest.{FlatSpec, Matchers}
+import org.scalatest.flatspec.AnyFlatSpec
+import org.scalatest.matchers.should.Matchers
 
 import scala.io.Source
 import scala.concurrent.duration._
 
-class ParserASpec extends FlatSpec with Matchers {
+class ParserASpec extends AnyFlatSpec with Matchers {
   val blockHtml = Source.fromResource("htmlBlock1.html").mkString
   val blockHtml2 = Source.fromResource("htmlBlock2.html").mkString
 
@@ -32,15 +33,18 @@ class ParserASpec extends FlatSpec with Matchers {
     val page2 = Source.fromResource("htmlPage2.html").mkString
 
     ParserA.parse(Jsoup.parse(page1)) shouldBe List(
-      ("Троицкий", List(
-        Arrival("43", 0 minutes, Bus),
-        Arrival("3", 32 minutes, Troll))
+      (
+        "Троицкий",
+        List(Arrival("43", 0 minutes, Bus), Arrival("3", 32 minutes, Troll))
       ),
-      ("Лермонтовский д.57", List(
+      (
+        "Лермонтовский д.57",
+        List(
           Arrival("100", 0 minutes, Bus),
           Arrival("10", 4 minutes, Bus),
-          Arrival("8" , 8 minutes, Troll),
-          Arrival("3", 23 minutes, Troll))
+          Arrival("8", 8 minutes, Troll),
+          Arrival("3", 23 minutes, Troll)
+        )
       )
     )
     ParserA.parse(Jsoup.parse(page2)) shouldBe List()

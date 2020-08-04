@@ -5,4 +5,5 @@ val settings = Compiler.settings ++ Seq()
 
 lazy val plato = (project in file("."))
   .settings(name := "plato")
+  .settings(Compiler.settings)
   .settings(libraryDependencies ++= Dependencies.common)
