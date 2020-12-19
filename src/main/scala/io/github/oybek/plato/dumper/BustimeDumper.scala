@@ -8,7 +8,7 @@ import org.jsoup.Jsoup
 
 import scala.jdk.CollectionConverters._
 
-object DumperA extends CityStopDumper {
+object BustimeDumper extends CityStopDumper {
 
   override def dumpCity(cityName: String): Either[Throwable, List[Stop]] =
     for {

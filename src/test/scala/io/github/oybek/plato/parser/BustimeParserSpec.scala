@@ -11,19 +11,19 @@ import org.scalatest.matchers.should.Matchers
 import scala.io.Source
 import scala.concurrent.duration._
 
-class ParserASpec extends AnyFlatSpec with Matchers {
+class BustimeParserSpec extends AnyFlatSpec with Matchers {
   val blockHtml = Source.fromResource("htmlBlock1.html").mkString
   val blockHtml2 = Source.fromResource("htmlBlock2.html").mkString
 
   "Bustime block parse" must "work ok" in {
-    ParserA.parseBlock(LocalTime.of(20, 35), Jsoup.parse(blockHtml)) shouldBe Some(
+    BustimeParser.parseBlock(LocalTime.of(20, 35), Jsoup.parse(blockHtml)) shouldBe Some(
       "Мира" -> List(
         Arrival("4", 2 minutes, Tram),
         Arrival("20", 4 minutes, Tram),
         Arrival("18", 5 minutes, Tram),
       )
     )
-    ParserA.parseBlock(LocalTime.of(23, 30), Jsoup.parse(blockHtml2)) shouldBe Some(
+    BustimeParser.parseBlock(LocalTime.of(23, 30), Jsoup.parse(blockHtml2)) shouldBe Some(
       "Первомайская" -> List(Arrival("28", 3 minutes, Bus))
     )
   }
@@ -32,7 +32,7 @@ class ParserASpec extends AnyFlatSpec with Matchers {
     val page1 = Source.fromResource("htmlPage1.html").mkString
     val page2 = Source.fromResource("htmlPage2.html").mkString
 
-    ParserA.parse(Jsoup.parse(page1)) shouldBe List(
+    BustimeParser.parse(Jsoup.parse(page1)) shouldBe List(
       (
         "Троицкий",
         List(Arrival("43", 0 minutes, Bus), Arrival("3", 32 minutes, Troll))
@@ -47,6 +47,6 @@ class ParserASpec extends AnyFlatSpec with Matchers {
         )
       )
     )
-    ParserA.parse(Jsoup.parse(page2)) shouldBe List()
+    BustimeParser.parse(Jsoup.parse(page2)) shouldBe List()
   }
 }

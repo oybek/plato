@@ -6,10 +6,10 @@ import io.github.oybek.plato.model.{Geo, Stop}
 import org.scalatest.flatspec.AnyFlatSpec
 import org.scalatest.matchers.should.Matchers
 
-class DumperASpec extends AnyFlatSpec with Matchers {
+class BustimeDumperSpec extends AnyFlatSpec with Matchers {
 
   "City" must "be parsed well" in {
-    val stops = DumperA.dumpCity("helsinki")
+    val stops = BustimeDumper.dumpCity("helsinki")
     new PrintWriter("dump.sql") {
       write("insert into stop (name, latitude, longitude, url, city_id) values\n")
       stops.getOrElse(List.empty[Stop]).foreach {
